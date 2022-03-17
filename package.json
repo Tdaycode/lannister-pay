@@ -6,7 +6,6 @@
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
     "morgan": "^1.10.0",
-    "shortid": "^2.2.16",
     "supertest": "^6.1.6"
   },
   "type": "module",

@@ -1,14 +1,14 @@
-import express from "express";
-import dotenv from "dotenv";
-import morgan from "morgan";
-import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
+const express= require('express');
+const dotenv = require('dotenv'); 
+const morgan = require('morgan');
+const paymentRoutes = require('./routes/paymentRoute');
 
-import cors from "cors";
-// import paymentRoutes from "./routes/paymentRoutes.js";
-
+const cors = require('cors');
 
 const app = express();
 dotenv.config();
+
+
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
@@ -25,7 +25,6 @@ app.get("*", function (req, res) {
 });
 
 
-app.use(notFound);
-app.use(errorHandler);
+app.use("/", paymentRoutes)
 
-export default app;
+module.exports = app;

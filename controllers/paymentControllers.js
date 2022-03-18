@@ -39,7 +39,9 @@ feeConfig = Object.assign({},...feeConfig)
 
 console.log(feeConfig);
 
-res.status(200).send(feeConfig)
+res.status(200).json({
+  "status": "ok"
+})
 
 
   }catch(err) {

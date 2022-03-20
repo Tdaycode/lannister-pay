@@ -3,7 +3,9 @@ const express = require('express');
 const asyncHandler = require('express-async-handler');
 const app = express();
 
+const Redis = require("ioredis");
 
+let client = new Redis("redis://:f7f3925ea2da45619f1826c5dd0b7c77@global-exciting-squirrel-32209.upstash.io:32209");
 
 
 
@@ -18,7 +20,7 @@ console.log("here")
   const {FeeConfigurationSpec} = req.body;
   try {
     
-let feeConfig =FeeConfigurationSpec.split('\n').map((item)=> {
+  let feeConfig = FeeConfigurationSpec.split('\n').map((item)=> {
   let feeItem = item.split(' ');
   let FEE_ID = feeItem[0]
   return {
@@ -35,25 +37,42 @@ let feeConfig =FeeConfigurationSpec.split('\n').map((item)=> {
   }
 })
 
-feeConfig = Object.assign({},...feeConfig)
+    feeConfig = Object.assign({},...feeConfig)
+    await client.set('foo', JSON.stringify(feeConfig));
 
-console.log(feeConfig);
 
-res.status(200).json({
-  "status": "ok"
-})
+    res.status(200).json({
+      "status": "ok"
+   })
 
 
   }catch(err) {
     return res.status(500).json({
       status: "error",
-      message: error.message,
+      message: err.message,
     })
 
   }
 })
 
+const transactFee = asyncHandler(async (req, res) => {
+
+  try {
+    const value =  await client.get('foo')
+    console.log(JSON.parse(value))
+    res.send(JSON.parse(value))
+    
+  }catch (err) {
+    return res.status(500).json({
+      status: "error",
+      message: err.message,
+    })
+
+  }
+
+})
 
 
-module.exports = {feeConfig}
+
+module.exports = {feeConfig, transactFee}
  
